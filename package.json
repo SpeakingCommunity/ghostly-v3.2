@@ -5,9 +5,10 @@
   "main": "index.js",
   "dependencies": {
     "discord.js": "^12.5.1",
-    "openjsk": "^1.0.0",
+    "openjsk": "git+https://github.com/5GameMaker/openjsk.git",
     "os": "^0.1.1",
-    "pg": "^8.5.1"
+    "pg": "^8.5.1",
+    "sequelize": "^6.5.0"
   },
   "devDependencies": {},
   "scripts": {

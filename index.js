@@ -22,6 +22,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const openjsk_1 = require("openjsk");
 const sequelize_1 = require("sequelize");
 const config = __importStar(require("./.config.json"));
+const economy_1 = require("./modules/economy");
 const help_1 = require("./modules/help");
 const bot = new openjsk_1.Bot({
     prefix: config.prefix,
@@ -30,4 +31,5 @@ bot.db = new sequelize_1.Sequelize(config.database);
 bot.loadPlugin(new openjsk_1.plugins.DefaultPrefixManager(bot));
 bot.loadPlugin(new openjsk_1.plugins.DefaultHandler(bot));
 bot.loadPlugin(new help_1.Help(bot));
+bot.loadPlugin(new economy_1.Economy(bot));
 bot.login(config.token);

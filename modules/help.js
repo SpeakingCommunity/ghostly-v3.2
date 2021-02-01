@@ -21,8 +21,8 @@ class Help extends openjsk_1.Module {
                 let actualPage = (a => isNaN(a) ? 1 : a)(parseInt(nameOfSmthOrPage && !isNaN(parseInt(nameOfSmthOrPage)) ? nameOfSmthOrPage : page || '1')) - 1;
                 if (nameOfSmthOrPage && isNaN(parseInt(nameOfSmthOrPage))) {
                     commands = commands.filter(a => a.category == nameOfSmthOrPage ||
-                        a.name == nameOfSmthOrPage ||
-                        a.aliases.includes(nameOfSmthOrPage));
+                        a.name.includes(nameOfSmthOrPage) ||
+                        a.aliases.filter(b => b.includes(nameOfSmthOrPage)).length > 0);
                 }
                 const pages = Math.ceil(commands.length / 5);
                 if (pages == 0) {
@@ -161,6 +161,8 @@ class Help extends openjsk_1.Module {
                 }));
             }
         }));
+        // TODO: Add prefix command when it will be possible
+        // TODO: Add language command when it will be possible
     }
 }
 exports.Help = Help;

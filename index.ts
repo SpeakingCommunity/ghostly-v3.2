@@ -1,6 +1,7 @@
 import { Bot, Module, plugins } from 'openjsk';
 import { Options, Sequelize } from 'sequelize';
 import * as config from './.config.json';
+import { Economy } from './modules/economy';
 import { Help } from './modules/help';
 
 const bot = new Bot({
@@ -13,5 +14,6 @@ bot.loadPlugin(new plugins.DefaultPrefixManager(bot));
 bot.loadPlugin(new plugins.DefaultHandler(bot));
 
 bot.loadPlugin(new Help(bot));
+bot.loadPlugin(new Economy(bot));
 
 bot.login(config.token);
