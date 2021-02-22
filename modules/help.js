@@ -4,6 +4,7 @@ exports.Help = void 0;
 const discord_js_1 = require("discord.js");
 const openjsk_1 = require("openjsk");
 const os_1 = require("os");
+const paginator_1 = require("./paginator");
 class Help extends openjsk_1.Module {
     constructor(bot) {
         super(bot);
@@ -16,6 +17,8 @@ class Help extends openjsk_1.Module {
                 level: openjsk_1.CommandPermissionsLevel.DM,
             },
             executable: async (ctx, nameOfSmthOrPage, page) => {
+                if (ctx.message.channel instanceof discord_js_1.NewsChannel)
+                    return;
                 const mods = bot.getPluginsOfType(openjsk_1.Module);
                 let commands = mods.map(a => a.commands).flat();
                 let actualPage = (a => isNaN(a) ? 1 : a)(parseInt(nameOfSmthOrPage && !isNaN(parseInt(nameOfSmthOrPage)) ? nameOfSmthOrPage : page || '1')) - 1;
@@ -29,33 +32,26 @@ class Help extends openjsk_1.Module {
                     ctx.message.channel.send("Found 0 commands from search query");
                     return;
                 }
-                while (actualPage < 0)
-                    actualPage += pages;
-                while (actualPage > pages)
-                    actualPage -= pages;
-                function generateMessage() {
-                    return new discord_js_1.MessageEmbed({
-                        title: "Commands list",
-                        description: "List of commands. Maybe useful",
-                        fields: commands
-                            .slice(actualPage * 5, actualPage * 5 + 5)
-                            .map(a => {
-                            const value = new Array();
-                            value.push(`> No description`.replace(/\n/g, "\n> "));
-                            value.push(``);
-                            if (a.aliases.length > 0)
-                                value.push(`**Aliases**: ${a.aliases.join(', ')}`);
-                            if (a.category)
-                                value.push(`**Category**: ${a.category}`);
-                            return {
-                                name: a.name,
-                                value: value.join('\n'),
-                                inline: true,
-                            };
-                        }),
-                    });
-                }
-                ctx.message.channel.send(generateMessage());
+                bot.getPluginsOfType(paginator_1.Paginator)[0].paginate(ctx.message.channel, new Array(pages).fill(1).map((_, i) => new discord_js_1.MessageEmbed({
+                    title: "Commands list",
+                    description: "List of commands. Maybe useful",
+                    fields: commands
+                        .slice(i * 5, i * 5 + 5)
+                        .map(a => {
+                        const value = new Array();
+                        value.push(`> No description`.replace(/\n/g, "\n> "));
+                        value.push(``);
+                        if (a.aliases.length > 0)
+                            value.push(`**Aliases**: ${a.aliases.join(', ')}`);
+                        if (a.category)
+                            value.push(`**Category**: ${a.category}`);
+                        return {
+                            name: a.name,
+                            value: value.join('\n'),
+                            inline: true,
+                        };
+                    }),
+                })), ctx.message.author, actualPage);
             }
         }));
         this.addCommand(new openjsk_1.Command({

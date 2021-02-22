@@ -8,6 +8,7 @@
     "openjsk": "git+https://github.com/5GameMaker/openjsk.git",
     "os": "^0.1.1",
     "pg": "^8.5.1",
+    "pg-hstore": "^2.3.3",
     "sequelize": "^6.5.0"
   },
   "devDependencies": {},

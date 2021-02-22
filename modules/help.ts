@@ -1,6 +1,7 @@
-import { ClientUser, EmbedFieldData, MessageEmbed, Team, User, version } from "discord.js";
+import { ClientUser, DMChannel, EmbedFieldData, Guild, GuildMember, MessageEmbed, NewsChannel, Team, TextChannel, User, version } from "discord.js";
 import { Bot, Command, CommandPermissionsLevel, Module } from "openjsk";
 import { platform, release } from "os";
+import { Paginator } from "./paginator";
 
 export class Help extends Module { // this module probably will be added to the next release of openjsk
     constructor(bot : Bot) {
@@ -16,6 +17,8 @@ export class Help extends Module { // this module probably will be added to the 
                 level: CommandPermissionsLevel.DM,
             },
             executable: async (ctx, nameOfSmthOrPage : string | undefined, page : string | undefined) => {
+                if (ctx.message.channel instanceof NewsChannel) return;
+
                 const mods = bot.getPluginsOfType<Module>(Module);
                 let commands = mods.map(a => a.commands).flat();
 
@@ -41,33 +44,31 @@ export class Help extends Module { // this module probably will be added to the 
                     return;
                 }
 
-                while (actualPage < 0) actualPage += pages;
-                while (actualPage > pages) actualPage -= pages;
-
-                function generateMessage() {
-                    return new MessageEmbed({
+                bot.getPluginsOfType<Paginator>(Paginator)[0].paginate(
+                    ctx.message.channel,
+                    new Array(pages).fill(1).map((_, i) => new MessageEmbed({
                         title: "Commands list",
                         description: "List of commands. Maybe useful",
                         fields: commands
-                            .slice(actualPage * 5, actualPage * 5 + 5)
+                            .slice(i * 5, i * 5 + 5)
                             .map(a => {
                                 const value = new Array<string>();
-
+    
                                 value.push(`> No description`.replace(/\n/g, "\n> "));
                                 value.push(``);
                                 if (a.aliases.length > 0) value.push(`**Aliases**: ${a.aliases.join(', ')}`);
                                 if (a.category) value.push(`**Category**: ${a.category}`);
-
+    
                                 return {
                                     name: a.name,
                                     value: value.join('\n'),
                                     inline: true,
                                 }
                             }),
-                    });
-                }
-
-                ctx.message.channel.send(generateMessage());
+                    })),
+                    ctx.message.author,
+                    actualPage,
+                );
             }
         }));
 
