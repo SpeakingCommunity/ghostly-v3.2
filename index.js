@@ -23,6 +23,7 @@ const openjsk_1 = require("openjsk");
 const sequelize_1 = require("sequelize");
 const config = __importStar(require("./.config.json"));
 const economy_1 = require("./modules/economy");
+const fighthub_1 = require("./modules/fighthub");
 const help_1 = require("./modules/help");
 const paginator_1 = require("./modules/paginator");
 const bot = new openjsk_1.Bot({
@@ -40,4 +41,5 @@ bot.loadPlugin(new openjsk_1.plugins.DefaultHandler(bot));
 bot.loadPlugin(new help_1.Help(bot));
 bot.loadPlugin(new economy_1.Economy(bot));
 bot.loadPlugin(new paginator_1.Paginator(bot));
+bot.loadPlugin(new fighthub_1.FightHub(bot));
 bot.login(config.token);

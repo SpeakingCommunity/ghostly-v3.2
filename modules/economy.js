@@ -308,7 +308,7 @@ class Economy extends openjsk_1.Module {
                                     "solid",
                                     "stone",
                                     "log",
-                                ]
+                                ],
                             }
                             : {
                                 maxdurability: 20,

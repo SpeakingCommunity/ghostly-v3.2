@@ -5,13 +5,18 @@
   "main": "index.js",
   "dependencies": {
     "discord.js": "^12.5.1",
+    "node-fetch": "^2.6.1",
     "openjsk": "git+https://github.com/5GameMaker/openjsk.git",
     "os": "^0.1.1",
     "pg": "^8.5.1",
     "pg-hstore": "^2.3.3",
-    "sequelize": "^6.5.0"
+    "sequelize": "^6.5.0",
+    "unidecode": "^0.1.8"
   },
-  "devDependencies": {},
+  "devDependencies": {
+    "@types/node-fetch": "^2.5.8",
+    "@types/unidecode": "^0.1.1"
+  },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },

@@ -355,7 +355,7 @@ export class Economy extends Module {
                                     "solid",
                                     "stone",
                                     "log",
-                                ]
+                                ],
                             }
                             : {
                                 maxdurability: 20,
